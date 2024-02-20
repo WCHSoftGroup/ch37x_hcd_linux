@@ -2041,7 +2041,7 @@ static int ch37x_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 w
 		}
 		switch (wValue) {
 		case USB_PORT_FEAT_ENABLE:
-			ch37x_hcd->ports[index - 1].port_status.wPortStatus != USB_PORT_STAT_ENABLE;
+			ch37x_hcd->ports[index - 1].port_status.wPortStatus |= USB_PORT_STAT_ENABLE;
 			break;
 		case USB_PORT_FEAT_SUSPEND:
 			break;
