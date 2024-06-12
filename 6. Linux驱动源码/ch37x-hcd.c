@@ -511,13 +511,12 @@ static int ch37x_debugfs_init(struct usb_hcd *hcd)
 	return 0;
 }
 
-static int ch37x_debugfs_exit(struct usb_hcd *hcd)
+static void ch37x_debugfs_exit(struct usb_hcd *hcd)
 {
 	struct ch37x_hcd_data *ch37x_hcd = hcd_to_ch37x(hcd);
 
 	debugfs_remove(ch37x_hcd->debugfile);
 	debugfs_remove_recursive(ch37x_hcd->debugfs);
-	return 0;
 }
 
 #else
@@ -1326,7 +1325,6 @@ static int ch37x_handle_pid_status(struct usb_hcd *hcd, int result)
 
 static void ch37x_setpid(struct usb_hcd *hcd, struct urb *urb, bool tog)
 {
-	struct ch37x_hcd_data *ch37x_hcd = hcd_to_ch37x(hcd);
 	int epnum = usb_pipeendpoint(urb->pipe);
 
 	Write374Byte(hcd, REG_USB_LENGTH, 0);
@@ -2311,13 +2309,13 @@ static struct hc_driver ch37x_hcd_desc = {
 
 static void ch37x_resume_delaywork_func(struct work_struct *work)
 {
+#if 0
 	struct delayed_work *delaywork = container_of(work, struct delayed_work, work);
 	struct ch37x_hcd_data *ch37x_hcd = container_of(delaywork, struct ch37x_hcd_data, delaywork);
 	struct usb_hcd *hcd = ch37x_to_hcd(ch37x_hcd);
 
 	return;
-
-#if 0
+	
 	atomic_set(&ch37x_hcd->suspend_flag, 0);
 	//	Write374Byte(hcd,REG_HUB_SETUP, Read374Byte(hcd, REG_HUB_SETUP) | BIT_HUB0_EN);
 	//	Write374Byte(hcd, REG_SYS_CTRL, Read374Byte(hcd, REG_SYS_CTRL ) & (~ BIT_CTRL_OSCIL_OFF) );
@@ -2502,7 +2500,7 @@ static int ch37x_remove(struct spi_device *spi)
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0))
 	return;
 #else
-	return 0
+	return 0;
 #endif
 }
 
